@@ -1,14 +1,48 @@
 # Kirin Commander
 
-A two-panel file manager in the line of Norton Commander, Volkov Commander
-and Far Manager - the "orthodox file manager" - for three places at once:
-DOS, a desktop (Windows, Linux), and a browser.
+**One file manager in Rust, from DOS to the browser.** The same source, the
+same panels, the same keys - built four ways:
+
+| | |
+|---|---|
+| **DOS** | a 32-bit binary under DPMI on a 386, writing straight into text memory at B800, its files through INT 21h |
+| **Windows** | a console program |
+| **Linux** | a terminal program |
+| **A browser** | WebAssembly on a canvas, its drives the browser's own storage |
+
+Not four ports: one commander (`kc/`, `no_std`, so it fits DOS), and for
+each place a small host that gives it keys, a screen and files. A fix
+made once is made everywhere, and a test of `kc/` is a test of all four.
+
+It is a two-panel file manager in the line of Norton Commander, Volkov
+Commander and Far Manager - the "orthodox file manager".
 
 It is built on [OWLOSUI](https://github.com/KirinDenis/OWLOSUI), a text-mode
 user interface toolkit with one core written in Rust, drawn the same way on
 DOS (through its resident at INT 60h), in a native window or a terminal,
 and on a canvas in a browser (WebAssembly). OWLOSUI draws every cell; Kirin
 Commander says what the panels hold and what the keys do.
+
+**Try it in the browser:** [kirindenis.github.io/Kirin_Commander](https://kirindenis.github.io/Kirin_Commander/).
+There A: is a read-only sample disk, C: a disk in memory, and D: a folder
+of your browser's storage that is still there tomorrow. F1 shows the
+keys, F9 the menu.
+
+**Download:** [the latest release](https://github.com/KirinDenis/Kirin_Commander/releases/latest) -
+`kc-dos.zip` (KC.COM, KC.BIN and CWSDPMI for DOS, a 386 or later) and
+`kc-windows-x64.zip` (`kc.exe`, in a console window).
+
+![The two panels: Brief on the left with two files selected, Full on the right](docs/screens/main.png)
+
+| | |
+|---|---|
+| ![The F9 menu, Files open](docs/screens/menu.png) | ![F5: copy two selected files, with the overwrite choice](docs/screens/copy.png) |
+| The F9 menu: every item shows its key | F5: what to do with files already there is asked first |
+| ![The viewer on an assembly source, coloured by its language](docs/screens/view.png) | ![The same commander on DOS, in WIRE CITY's DOS PC](docs/screens/dos.png) |
+| F3: the viewer, an assembly source coloured by its language | On DOS: the same program, drawn into B800 (WIRE CITY's DOS PC) |
+
+The screens above are the browser build, which draws the cells the DOS
+build puts in text memory; the last one is DOS itself.
 
 ## Status
 
@@ -52,7 +86,11 @@ Working now, on DOS, in a desktop terminal and in a browser:
   source with WIRE CITY's `Drive` calls. The command line goes to the
   page's `run`; the test page has none, WIRE CITY's console is next.
 
-Not yet: Kirin Commander inside WIRE CITY (its drive table, its console
+On DOS it is already WIRE CITY's commander: the course page and the site
+start into it, with `/STEP` so a game run from it has all of DOS's memory
+(docs/07 7.2).
+
+Not yet: the browser build inside WIRE CITY (its drive table, its console
 as the terminal, docs/07 7.4); a translation (the language files work,
 none is written); the key bar's rows while Shift, Ctrl or Alt is held on
 a desktop; INT 24h on DOS. [09-decisions.md](docs/09-decisions.md) keeps the list.
@@ -92,5 +130,6 @@ there; then a git dependency pinned to that commit (D12).
 
 ## Licence
 
-MIT, as OWLOSUI.
-"# Kirin_Commander"  git init git add README.md git commit -m "first commit" git branch -M main git remote add origin https://github.com/KirinDenis/Kirin_Commander.git git push -u origin main
+MIT, as OWLOSUI. `dos/CWSDPMI.EXE` is CWSDPMI, the DPMI host by Charles
+W. Sandmann, redistributed unchanged under its own terms
+(`dos/cwsdpmi.doc`).

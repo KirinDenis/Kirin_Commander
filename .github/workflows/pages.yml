@@ -1,0 +1,43 @@
+# The demo site: web/'s page, as built and committed (web\build.cmd makes
+# kc.wasm), on GitHub Pages. Nothing is built here - the wasm needs
+# OWLOSUI beside this repository and Binaryen; the page is what is in git.
+#
+# Once, in the repository's Settings > Pages: Source "GitHub Actions".
+name: Demo site
+
+on:
+  push:
+    branches: [main]
+    paths: ['web/**', '.github/workflows/pages.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      # The page and what it loads - not web/'s Rust sources or build files.
+      - name: The page
+        run: |
+          mkdir site
+          cp web/index.html web/kc.js web/kc.wasm web/memory.js site/
+          cp -r web/owlosui site/
+          touch site/.nojekyll
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@v4

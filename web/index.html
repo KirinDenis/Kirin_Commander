@@ -21,16 +21,44 @@ import { Commander } from './kc.js';
 import { MemorySource, Letter } from './memory.js';
 import { BrowserStorage } from './owlosui/files/browser.js';
 
+const hello = [
+  '; HELLO.ASM - a line of text through DOS, and back to the prompt.',
+  ';',
+  ';     fasm hello.asm hello.com',
+  '',
+  '        org  100h               ; a .COM starts 256 bytes into its segment',
+  '',
+  'start:  mov  ah,9               ; DOS function 09h: print up to a $',
+  '        mov  dx,msg             ; DS:DX - the text',
+  '        int  21h',
+  '        mov  ax,4C00h           ; function 4Ch: end, with code 0',
+  '        int  21h',
+  '',
+  "msg     db   'Hello from the panels!',13,10,'$'",
+  '',
+].join('\r\n');
 const sample = new MemorySource({
-  '/README.TXT': 'Kirin Commander in a browser.\r\nA: is read-only, C: is in memory, D: is this browser\'s storage.\r\n',
-  '/GAMES/OWLFLY/OWLFLY.COM': new Uint8Array(4096),
+  '/README.TXT': 'Kirin Commander in a browser.\r\nA: is read-only, C: is in memory, D: is this browser\'s storage.\r\n' +
+    'F1 shows the keys, F9 the menu.\r\n',
+  '/AUTOEXEC.BAT': '@echo off\r\nprompt $p$g\r\npath C:\\DOS;C:\\TOOLS\r\n',
+  '/CONFIG.SYS': 'files=30\r\nbuffers=20\r\n',
+  '/GAMES/OWLFLY/OWLFLY.COM': new Uint8Array(41250),
   '/GAMES/OWLFLY/OWLFLY.ASM': '; a game\r\n        org 100h\r\n        ret\r\n',
-  '/GAMES/OWLFLY/BUILD.BAT': '@echo off\r\nfasm owlfly.asm\r\n',
-  '/GAMES/SOKO/SOKO.ZIP': new Uint8Array(1234),
-  '/LESSONS/L01/HELLO.ASM': '        org 100h\r\n        mov ah, 9\r\n        ret\r\n',
+  '/GAMES/OWLFLY/MAKE.BAT': '@echo off\r\nfasm owlfly.asm owlfly.com\r\n',
+  '/GAMES/OWLFLY/README.TXT': 'Fly with the arrows; Esc pauses.\r\n',
+  '/GAMES/SOKO/SOKO.COM': new Uint8Array(9876),
+  '/GAMES/SOKO/LEVELS.DAT': new Uint8Array(23456),
+  '/GAMES/WIRECITY/CITY.COM': new Uint8Array(17733),
+  '/LESSONS/L01/HELLO.ASM': hello,
+  '/LESSONS/L01/HELLO.COM': new Uint8Array(37),
   '/LESSONS/L01/HELLO.BAK': 'old\r\n',
+  '/LESSONS/L02/LINE.ASM': '        org 100h\r\n        ret\r\n',
+  '/LESSONS/L03/': null,
+  '/TOOLS/FASM.EXE': new Uint8Array(119296),
+  '/TOOLS/FASM.TXT': 'flat assembler\r\n',
+  '/TOOLS/CWSDPMI.EXE': new Uint8Array(21325),
 });
-const work = new MemorySource({ '/TEMP/': null, '/NOTES.TXT': 'Notes.\r\n' });
+const work = new MemorySource({ '/TEMP/': null, '/NOTES.TXT': 'Notes.\r\n', '/BACKUP/': null });
 const storage = new BrowserStorage();
 await storage.mkdir('/Kirin Commander D/');
 

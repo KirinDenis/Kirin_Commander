@@ -15,3 +15,5 @@ dos/KC.SAV
 CWSDPMI.SWP
 dos/CWSDPMI.SWP
 /.vs
+# The downloads release.ps1 packs, for a GitHub release - not kept in git.
+dist/
