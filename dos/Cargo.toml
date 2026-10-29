@@ -1,0 +1,31 @@
+[package]
+name = "kc-dos"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "Kirin Commander on DOS: a flat 32-bit binary KC.COM loads under DPMI."
+
+# Its own workspace: a target nothing else here is built for, nightly and
+# build-std (see .cargo/config.toml and build.cmd).
+[workspace]
+
+[[bin]]
+name = "kc"
+path = "src/main.rs"
+test = false
+bench = false
+
+[dependencies]
+kc = { path = "../kc", default-features = false, features = ["dos"] }
+owlosui-core = { path = "../../OWLOSUI/lib/core", default-features = false, features = ["dos"] }
+owlosui-dos = { path = "../../OWLOSUI/lib/dos" }
+
+[profile.release]
+panic = "abort"
+opt-level = "s"
+lto = true
+codegen-units = 1
+debug = false
+
+[profile.dev]
+panic = "abort"

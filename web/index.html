@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kirin Commander</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+  #box { position: fixed; inset: 0; }
+  canvas { display: block; outline: none; }
+</style>
+</head>
+<body>
+<!-- Kirin Commander on its own, for trying it and for tests: A: a
+     read-only disk in memory, C: a disk in memory, D: a folder of this
+     browser's storage that is there tomorrow. In WIRE CITY the drives are
+     the site's drive table and the command line is the site's console. -->
+<div id="box"><canvas id="screen" tabindex="0"></canvas></div>
+<script type="module">
+import { Commander } from './kc.js';
+import { MemorySource, Letter } from './memory.js';
+import { BrowserStorage } from './owlosui/files/browser.js';
+
+const sample = new MemorySource({
+  '/README.TXT': 'Kirin Commander in a browser.\r\nA: is read-only, C: is in memory, D: is this browser\'s storage.\r\n',
+  '/GAMES/OWLFLY/OWLFLY.COM': new Uint8Array(4096),
+  '/GAMES/OWLFLY/OWLFLY.ASM': '; a game\r\n        org 100h\r\n        ret\r\n',
+  '/GAMES/OWLFLY/BUILD.BAT': '@echo off\r\nfasm owlfly.asm\r\n',
+  '/GAMES/SOKO/SOKO.ZIP': new Uint8Array(1234),
+  '/LESSONS/L01/HELLO.ASM': '        org 100h\r\n        mov ah, 9\r\n        ret\r\n',
+  '/LESSONS/L01/HELLO.BAK': 'old\r\n',
+});
+const work = new MemorySource({ '/TEMP/': null, '/NOTES.TXT': 'Notes.\r\n' });
+const storage = new BrowserStorage();
+await storage.mkdir('/Kirin Commander D/');
+
+const drives = [
+  new Letter('A', sample, { kind: 'examples', readOnly: true }),
+  new Letter('C', work, { kind: 'memory' }),
+  new Letter('D', storage, { root: '/Kirin Commander D/', kind: 'storage' }),
+];
+const canvas = document.getElementById('screen');
+canvas.focus();
+const kc = await Commander.start(canvas, { drives, current: 'A:\\', box: document.getElementById('box'),
+  onQuit: () => document.body.append('Kirin Commander has ended. Reload the page to start it again.') });
+// For a test: window.kc.keys('Down F5 Enter'), window.kc.text().
+window.kc = kc;
+</script>
+</body>
+</html>

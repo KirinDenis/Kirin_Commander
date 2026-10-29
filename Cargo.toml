@@ -1,0 +1,16 @@
+[workspace]
+resolver = "2"
+members = ["kc", "term", "web"]
+# The DOS build is its own workspace: `cd dos && build.cmd`.
+exclude = ["dos"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+[profile.release]
+panic = "abort"
+opt-level = "s"
+lto = true
+strip = true

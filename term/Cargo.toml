@@ -1,0 +1,16 @@
+[package]
+name = "kc-term"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Kirin Commander in a terminal: Windows Terminal, a Linux console, over SSH."
+
+[[bin]]
+name = "kc"
+path = "src/main.rs"
+
+[dependencies]
+kc = { path = "../kc" }
+owlosui-core = { path = "../../OWLOSUI/lib/core" }
+owlosui-console = { path = "../../OWLOSUI/lib/console" }
+crossterm = "0.28"

@@ -1,0 +1,20 @@
+[package]
+name = "kc"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Kirin Commander: the two panels, the command line, the key bar and the file operations - the part that is the same on DOS, a desktop and a browser."
+
+[dependencies]
+# OWLOSUI's core: the cells, the key and mouse events. A path while the
+# OWLOSUI changes Kirin Commander needs are not yet committed there; a git
+# dependency pinned to a commit once they are (docs/09-decisions.md, D12).
+owlosui-core = { path = "../../OWLOSUI/lib/core", default-features = false }
+
+[features]
+default = ["std"]
+# Without it the crate is `no_std` plus `alloc`, for the DOS build.
+# With it: the desktop's own file system (`StdFs`).
+std = ["owlosui-core/std"]
+# A glyph is a byte, as OWLOSUI's `dos` feature makes it.
+dos = ["owlosui-core/dos"]

@@ -1,0 +1,18 @@
+[package]
+name = "kc-web"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Kirin Commander in a browser: the commander inside a WebAssembly module, its file system the page's drives."
+
+# A module the page loads: a few exported functions, two imported ones,
+# the memory. No wasm-bindgen - as OWLOSUI's wire.
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+kc = { path = "../kc", default-features = false }
+owlosui-core = { path = "../../OWLOSUI/lib/core", default-features = false }
+# The growing font: the code page 437 the frames are drawn in, and every
+# other character given the next glyph.
+owlosui-console = { path = "../../OWLOSUI/lib/console", default-features = false }

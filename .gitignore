@@ -1,0 +1,16 @@
+target/
+# What a DOS test run leaves: frames and the batch's words.
+dos/SHOT.BIN
+dos/SHOT.TXT
+dos/SHOTS.TXT
+dos/KC.OUT
+dos/LOADER.LOG
+dos/TRACE.TXT
+# A person's own setup, Save setup (Shift+F9) beside KC.COM.
+dos/KC.INI
+# What a /STEP run leaves if it is stopped between the two starts, and
+# CWSDPMI's swap file when the repository itself is mounted as C:.
+dos/RUNPROG.BAT
+dos/KC.SAV
+CWSDPMI.SWP
+dos/CWSDPMI.SWP
